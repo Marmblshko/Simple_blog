@@ -9,6 +9,7 @@
 <% @post.comments.each do |comment| %>
   <i><%= comment.author %> said:</i>
   <p><%= comment.body %></p>
+  <%= button_to "Delete comment", post_comment_path(@post, comment), method: :delete, data: {'turbo-confirm': 'Are you sure?' } %>
 <% end %>
 
 <%= form_for([@post, @post.comments.build]) do |f| %>
