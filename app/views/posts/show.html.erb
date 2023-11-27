@@ -2,14 +2,29 @@
 
 <p>
   <%= @post.text %>
-
 </p>
+<p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes' %></p>
+<% if current_user %>
+  <% if @post.likes.exists?(user_id: current_user.id) %>
+    <%= button_to 'Dislike', post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete %>
+  <% else %>
+    <%= button_to 'Like', post_likes_path(@post), method: :post %>
+  <% end %>
+<% end %>
 
 <h2>Comments</h2>
 <% @post.comments.each do |comment| %>
   <i><%= comment.author %> said:</i>
   <p><%= comment.body %></p>
-  <%= button_to "Delete comment", post_comment_path(@post, comment), method: :delete, data: {'turbo-confirm': 'Are you sure?' } %>
+  <p><%= comment.likes.count %> <%= (comment.likes.count) == 1 ? 'Like' : 'Likes' %></p>
+  <% if current_user %>
+    <% if comment.likes.exists?(user_id: current_user.id) %>
+      <%= button_to 'Dislike', comment_like_path(comment, comment.likes.find_by(user_id: current_user.id)), method: :delete %>
+    <% else %>
+      <%= button_to 'Like', comment_likes_path(comment), method: :post %>
+    <% end %>
+    <%= button_to "Delete comment", post_comment_path(@post, comment), method: :delete, data: { 'turbo-confirm': 'Are you sure?' } %>
+  <% end %>
 <% end %>
 
 <%= form_for([@post, @post.comments.build]) do |f| %>

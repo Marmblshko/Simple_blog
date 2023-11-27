@@ -1,13 +1,13 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create]
-  # before_action :check_owner, only: %i[edit update destroy]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :find_post, except: %i[index new create]
+  before_action :check_owner, only: %i[edit update destroy]
 
   def index
     @posts = Post.all
   end
 
   def show
-    @post = Post.find(params[:id])
   end
 
   def new
@@ -15,40 +15,41 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
+    @post.user = current_user
     if @post.save
-      redirect_to @post
+      redirect_to @post, notice: 'Post created!'
     else
       render :new
     end
   end
 
   def edit
-    @post = Post.find(params[:id])
   end
 
   def update
-    @post = Post.find(params[:id])
-
     if @post.update(post_params)
-      redirect_to @post
+      redirect_to @post, notice: 'Post updated!'
     else
       render :edit
     end
   end
 
   def destroy
-    @post = Post.find(params[:id])
     @post.destroy
-    redirect_to posts_path
+    redirect_to posts_path, notice: 'Post deleted!'
   end
 
   def check_owner
-    unless current_user == @post.user
-      redirect_to @posts, alert: "У вас нет разрешения на редактирование этой статьи."
+    unless current_user == User.find(@post.user_id)
+      redirect_to posts_path, notice: "You do not have permission to mod this post."
     end
   end
 
   private
+
+  def find_post
+    @post = Post.find(params[:id])
+  end
 
   def post_params
     params.require(:post).permit(:title, :text)
