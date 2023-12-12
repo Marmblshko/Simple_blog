@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
     if @contact.valid?
       @contact.save
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

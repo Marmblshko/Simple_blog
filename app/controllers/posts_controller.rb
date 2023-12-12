@@ -11,6 +11,7 @@ class PostsController < ApplicationController
   end
 
   def new
+    @post = Post.new
   end
 
   def create
@@ -19,7 +20,7 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to @post, notice: 'Post created!'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -30,7 +31,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to @post, notice: 'Post updated!'
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
