@@ -1,0 +1,9 @@
+<%= form_with model:[@post, @post.comments.build] do |f| %>
+  <div class="mb-4">
+    <%= f.label :body, "Your comment:", class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= f.text_area :body, class: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' %>
+  </div>
+  <div class="mb-4">
+    <%= f.submit 'Add Comment', class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' %>
+  </div>
+<% end %>

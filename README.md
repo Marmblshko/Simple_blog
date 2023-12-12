@@ -19,16 +19,21 @@ Simple Blog provides a user-friendly interface for creating and managing blog po
 
 ### CommentsController
 
-- Handles the creation and deletion of comments on posts.
+- Manages the creation and deletion of comments on posts.
 - Requires user authentication for certain actions.
 
 ### ContactsController
 
-- Manages user contacts, allowing them to submit new contacts.
+- Handles user contacts, allowing them to submit new contact entries.
+
+### LikesController
+
+- Manages the creation and deletion of likes on posts and comments.
+- Requires user authentication for like-related actions.
 
 ### PostsController
 
-- Handles CRUD operations for posts.
+- Manages CRUD operations for posts.
 - Requires user authentication for creating new posts.
 
 ## Models
@@ -44,13 +49,14 @@ Simple Blog provides a user-friendly interface for creating and managing blog po
 ### Contact
 
 - Represents user contacts with email and message fields.
-## Upcoming Features
 
-- **Styling and Theming:** Introduce a visually appealing design to enhance the user experience.
+### Like
 
-- **Likes for Posts and Comments:** Allow users to express their appreciation for posts and comments by adding a like feature.
+- Represents a like given by a user to a post or comment.
 
-- **Profile Section:** Move user profiles to a dedicated section, providing a comprehensive view of each user's activity.
+### Post
+
+- Represents a blog post with title and text content.
 
 ## Usage
 

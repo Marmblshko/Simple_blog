@@ -1,40 +1,26 @@
-<h1><%= @post.title %></h1>
-
-<p>
-  <%= @post.text %>
-</p>
-<p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes' %></p>
-<% if current_user %>
-  <% if @post.likes.exists?(user_id: current_user.id) %>
-    <%= button_to 'Dislike', post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete %>
-  <% else %>
-    <%= button_to 'Like', post_likes_path(@post), method: :post %>
-  <% end %>
-<% end %>
-
-<h2>Comments</h2>
-<% @post.comments.each do |comment| %>
-  <i><%= comment.author %> said:</i>
-  <p><%= comment.body %></p>
-  <p><%= comment.likes.count %> <%= (comment.likes.count) == 1 ? 'Like' : 'Likes' %></p>
+<div class="container mx-auto mt-8">
+  <h1 class="text-3xl font-bold mb-4"><%= @post.title %></h1>
+  <p class="mb-4"><%= @post.text %></p>
+  <p class="text-gray-600"><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes' %></p>
   <% if current_user %>
-    <% if comment.likes.exists?(user_id: current_user.id) %>
-      <%= button_to 'Dislike', comment_like_path(comment, comment.likes.find_by(user_id: current_user.id)), method: :delete %>
+    <% if @post.likes.exists?(user_id: current_user.id) %>
+      <%= button_to 'Dislike', post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete, class: 'bg-red-500 text-white py-2 px-4 rounded-full mr-2' %>
     <% else %>
-      <%= button_to 'Like', comment_likes_path(comment), method: :post %>
+      <%= button_to 'Like', post_likes_path(@post), method: :post, class: 'bg-blue-500 text-white py-2 px-4 rounded-full mr-2' %>
     <% end %>
-    <%= button_to "Delete comment", post_comment_path(@post, comment), method: :delete, data: { 'turbo-confirm': 'Are you sure?' } %>
   <% end %>
-<% end %>
+  <ul>
+    <li><%= link_to "Edit", edit_post_path(@post), class: 'text-blue-500 hover:underline mr-2' %></li>
+    <li>
+      <%= link_to "Destroy", post_path(@post), data: {
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure?"
+      }, class: 'text-red-500 hover:underline' %></li>
+  </ul>
+  <h2 class="text-2xl font-bold my-4">Comments</h2>
+    <%= render @post.comments %>
 
-<%= form_for([@post, @post.comments.build]) do |f| %>
-
-  <p>
-    <%= f.label :body %><br>
-    <%= f.text_area :body %>
-  </p>
-
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+  <h2>Add a comment:</h2>
+  <%= render "comments/form" %>
+  <%= link_to "Back", posts_path %>
+</div>

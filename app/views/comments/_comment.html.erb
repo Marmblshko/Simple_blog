@@ -1,0 +1,13 @@
+<div class="border border-gray-300 p-4 mb-4 rounded-lg">
+  <i class="text-gray-600"><%= comment.author %> said:</i>
+  <p class="mt-2 mb-4"><%= comment.body %></p>
+  <p class="text-gray-600"><%= comment.likes.count %> <%= (comment.likes.count) == 1 ? 'Like' : 'Likes' %></p>
+  <% if current_user %>
+    <% if comment.likes.exists?(user_id: current_user.id) %>
+      <%= button_to 'Dislike', comment_like_path(comment, comment.likes.find_by(user_id: current_user.id)), method: :delete, class: 'bg-red-500 text-white py-2 px-4 rounded-full mr-2' %>
+    <% else %>
+      <%= button_to 'Like', comment_likes_path(comment), method: :post, class: 'bg-blue-500 text-white py-2 px-4 rounded-full mr-2' %>
+    <% end %>
+    <%= button_to "Delete comment", post_comment_path(@post, comment), method: :delete, data: { 'turbo-confirm': 'Are you sure?' }, class: 'bg-gray-300 text-gray-700 py-2 px-4 rounded-full mr-2' %>
+  <% end %>
+</div>
